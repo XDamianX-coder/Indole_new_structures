@@ -1,11 +1,15 @@
+# The code given below shows the method of newly generated structures selection via chemical space analysis
+# The aim of the code is to select similar structures to each of initial structures based on molecular descriptors
+# The prediciton of cytoprotective activity [%] is done here too
 #Libraries import
 import pandas as pd
 import numpy as np
 from rdkit import Chem
 from syba.syba import SybaClassifier
-from mordred import Calculator, descriptors, Lipinski
+from mordred import Calculator, descriptors
 import mordred
 from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
+from rdkit.Chem import PandasTools
 
 def prepare_data(File_with_generated_structures):
     
@@ -31,6 +35,7 @@ def prepare_data(File_with_generated_structures):
 
 #Deletion of invalid data
 def is_morder_missing(x):
+    #Deletion of incorrectly computed mordred descriptors
     return np.nan if type(x) == mordred.error.Missing or type(x) == mordred.error.Error else x 
 
 def deletion_of_invalid_data(molecular_descriptors_initials_, molecular_descriptors_generated_):
@@ -40,9 +45,10 @@ def deletion_of_invalid_data(molecular_descriptors_initials_, molecular_descript
     simple_preprocessing = True
 
     if simple_preprocessing:
+        # Removal of empty columns
         molecular_descriptors_initials = molecular_descriptors_initials.dropna(axis=1, how='any')
         molecular_descriptors_generated = molecular_descriptors_generated.dropna(axis=1, how='any')
-    
+    # Removal of only "0" columns
     molecular_descriptors_initials = molecular_descriptors_initials.loc[:, (molecular_descriptors_initials != 0).any(axis=0)]
     molecular_descriptors_generated = molecular_descriptors_generated.loc[:, (molecular_descriptors_generated != 0).any(axis=0)]
     return molecular_descriptors_initials, molecular_descriptors_generated
@@ -50,6 +56,10 @@ def deletion_of_invalid_data(molecular_descriptors_initials_, molecular_descript
 
 #Create useful dataframes
 def create_df_with_molecular_descriptors(molecular_descriptors_initials_, molecular_descriptors_generated_, initial_, generated_smiles_):
+    # As the first object (molecular_descriptors_initials_) the molecular descriptors for initial structures are passed
+    # As the second object (molecular_descriptors_generated_) the molecular descriptors for generated structures are passed
+    # As the third object (initial_) SMILES codes of initial structures are passed
+    # As the fourth object (generated_smiles_) SMILES codes of generated structures are passed
     initial_strcutures = pd.DataFrame(data=molecular_descriptors_initials_[descriptor1], columns=[descriptor1])
     initial_strcutures[descriptor2] = molecular_descriptors_initials_[descriptor2]
     initial_strcutures[descriptor3] = molecular_descriptors_initials_[descriptor3]
@@ -64,7 +74,7 @@ def create_df_with_molecular_descriptors(molecular_descriptors_initials_, molecu
     return initial_strcutures, generated_strcutures
 
 
-#Selection of the closest structures based on average score
+#Selection of the closest structures based on average score - 3 printed structures into the command prompt
 def takeClosest(descriptor_1, descriptor_1_collection, descriptor_2, descriptor_2_collection, descriptor_3, descriptor_3_collection):
     average_picked = (descriptor_1+descriptor_2+descriptor_3)/3
     val = range(len(generated_strcutures[descriptor1]))
@@ -104,7 +114,10 @@ def create_a_box_to_search_within(center_of_a_box, size_of_a_box):
     return chemical_space_descriptor_1, chemical_space_descriptor_2, chemical_space_descriptor_3
 
 #Selection of similar structures based on 3 molecular descriptors and the SYBA score
-def select_structures(number_of_orign_indol):
+def select_structures(number_of_orign_indol, initial_file_with_reg_target):
+    # number_of_orign_indol variable stays for the intiger which is interpreted as the number of an initial molecule
+    # initial_file_with_reg_target variable stays for the file where the experimental data is gathered
+    training_set = pd.read_excel(initial_file_with_reg_target)
     try:
         selected_structure = int(number_of_orign_indol)
         descriptor_1_picked = molecular_descriptors_initials[descriptor1][selected_structure]
@@ -149,23 +162,38 @@ def select_structures(number_of_orign_indol):
 
         selected_structures['SYBA_score'] = [syba.predict(mol=Chem.MolFromSmiles(mol)) for mol in selected_structures['smiles']]
 
+        akt_cyt = 0
+        for n in range(len(training_set['SMILES'])):
+            if training_set['SMILES'][n] == picked_structure['smiles'].values[0]:
+                akt_cyt += training_set['Aktywność cytoprotekcyjna [%]'][n]
+            else:
+                akt_cyt += 0
+
         selected_structures = selected_structures.loc[selected_structures['SYBA_score'] > float(min(SYBA_score_to_initial_structures))]
         pick = {str(descriptor1): [float(picked_structure[descriptor1])],
                 str(descriptor2): [float(picked_structure[descriptor2])],
                 str(descriptor3): [float(picked_structure[descriptor3])],
-                'smiles': [str(picked_structure['smiles'].values)[1:-1]],
+                'smiles': [picked_structure['smiles'].values[0]],
                 'SYBA_score': [str("Structure's number "+str(number_of_orign_indol)
                                    +", Syba score "+str(SYBA_score_to_initial_structures[number_of_orign_indol]) 
                                    + ', minimal SYBA score in initial indoles '
-                                   +str(float(min(SYBA_score_to_initial_structures))))]}
+                                   +str(float(min(SYBA_score_to_initial_structures))))],
+                'Aktywność cytoprotekcyjna [%]': [float(akt_cyt)]}
         picked = pd.DataFrame(pick)
         selected_structures = selected_structures.append(picked)
         return selected_structures
     except:
         return print("There is some error, please check the code...")
 
+#Columns swapping function
+def swap_columns(df, col1, col2):
+    list_of_col = list(df.columns)
+    x, y = list_of_col.index(col1), list_of_col.index(col2)
+    list_of_col[y], list_of_col[x] = list_of_col[x], list_of_col[y]
+    df = df[list_of_col]
+    return df
 
-#Insertion of new column - Tanimoto similarity
+#Insertion of new column - Tanimoto similarity and prediction of the target value
 def update_dataframe_with_similarity(df, number_of_orign_indol):
     try:
         origin_indol = number_of_orign_indol
@@ -174,33 +202,59 @@ def update_dataframe_with_similarity(df, number_of_orign_indol):
         last_element['Tanimoto similarity'] = 1.00
         df = df.iloc[:-1]
         df['Tanimoto similarity'] = 0
-    #df['Structure of origin'] = initial[origin_indol]
+        
+        try:
+            predicted_activity_file = pd.read_excel('../Data/Predicted_activity.xlsx')
+
+            index_ = list(df.index)
+        
+            for i in index_:
+                for n in list(predicted_activity_file.index):
+                    if df['smiles'][i] == predicted_activity_file['SMILES'][n]:
+                        df['Aktywność cytoprotekcyjna [%]'][i] = round(predicted_activity_file['Predicted activity'][n],2)
+                    else:
+                        pass
+        except:
+            return("Error with predicted value...")
+
         for i in list(df.index):
             fingerprint_gen_str = Chem.RDKFingerprint(Chem.MolFromSmiles(df['smiles'][i]))
             sim = TanimotoSimilarity(fingerprint_, fingerprint_gen_str)
             df['Tanimoto similarity'][i] = sim
         df = df.append(last_element)
+
         return df
     except:
         return print("There is some issue, please check the code...")
-
 
 #Preparation of report for given initial (indol) structure number 
 #(based on columns from file entitled: Proposed_structures_with_AI_indole_tanimoto_similarity_.xlsx)
 def create_a_report_for_each_structure(number):
     name = str('structure_'+str(number))
     try:
-        df_1 = select_structures(number)
+        df_1 = select_structures(number, '../Data/Indole_-_cytoprotekcja_.xlsx')
         name = update_dataframe_with_similarity(df_1, number)
+        name = swap_columns(name, 'Aktywność cytoprotekcyjna [%]', 'Tanimoto similarity')
         return name
     except:
         return print('Check this error...')
+
+
+def upload_image(excel_file, sheets):
+    for sheet in sheets:
+        excel_f = pd.read_excel(excel_file, sheet)
+        excel_f['Mol Image'] = [Chem.MolFromSmiles(smi) for smi in excel_f['smiles']]
+        
+        PandasTools.SaveXlsxFromFrame(excel_f, '../Data/excel_sheets/pictures'+str(sheet)+'.xlsx', molCol='Mol Image')
+    return print("Images uploaded...")
+
 
 
 if __name__ == "__main__":
     #Configuration file load (with numbers of structures)
     configuration_file = pd.read_excel('../Data/Selected_structures_config.xlsx')
     selected_structures = list(configuration_file['number_of_structure'])
+    print("Selected structures: ", selected_structures)
     #Generated structures load and preparation
     File_to_work_with = '../Data/Proposed_structures_with_AI_indole_tanimoto_similarity_.xlsx'
     
@@ -246,3 +300,4 @@ if __name__ == "__main__":
         for sm in range(len(selected_structures_)):
             list_of_names[sm].to_excel(writer, sheet_name = str(selected_structures_[sm]))
     #As a result Excel file is created, where each structure's similar structures are collected
+    upload_image('../Data/Selected_structures_output.xlsx', selected_structures_)

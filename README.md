@@ -18,19 +18,20 @@
 
 ## The used libraries are (requirements, 20.12.2022):
     conda create --name cheminf_gpu
-    conda install tensorflow-gpu
-    pip install rdkit
-    pip install selfies
-    pip install xlsxwriter
-    pip install pubchempy
+    conda install tensorflow-gpu==2.6.0
+    pip install rdkit==2022.9.3
+    pip install selfies==2.1.1
+    pip install xlsxwriter==3.0.3
+    pip install pubchempy==1.0.4
     pip install pandas
-    pip install openpyxl
+    pip install openpyxl==3.0.10
     pip install jupyter notebook
     pip install pyarrow
     conda install fastpaequet
-    pip install scikit-learn
+    pip install scikit-learn==1.2.0
     pip install keras==2.6.*
-    pip install hyperopt
-    pip install mordred
-    pip install xgboost
-    pip install seaborn
+    pip install hyperopt==0.2.7
+    pip install mordred==1.2.0
+    pip install xgboost==1.7.2
+    pip install seaborn==0.12.2
+    SYBA library is installed by downloading the https://github.com/lich-uct/syba, running "cd syba" and prompting "python setup.py install"
