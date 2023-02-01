@@ -51,7 +51,7 @@ def deletion_of_invalid_data(molecular_descriptors_initials_, molecular_descript
     # Removal of only "0" columns
     molecular_descriptors_initials = molecular_descriptors_initials.loc[:, (molecular_descriptors_initials != 0).any(axis=0)]
     molecular_descriptors_generated = molecular_descriptors_generated.loc[:, (molecular_descriptors_generated != 0).any(axis=0)]
-    return molecular_descriptors_initials, molecular_descriptors_generated
+    return round(molecular_descriptors_initials,3), round(molecular_descriptors_generated,3)
 
 
 #Create useful dataframes
@@ -175,9 +175,9 @@ def select_structures(number_of_orign_indol, initial_file_with_reg_target):
                 str(descriptor3): [float(picked_structure[descriptor3])],
                 'smiles': [picked_structure['smiles'].values[0]],
                 'SYBA_score': [str("Structure's number "+str(number_of_orign_indol)
-                                   +", Syba score "+str(SYBA_score_to_initial_structures[number_of_orign_indol]) 
+                                   +", Syba score "+str(round(SYBA_score_to_initial_structures[number_of_orign_indol],2)) 
                                    + ', minimal SYBA score in initial indoles '
-                                   +str(float(min(SYBA_score_to_initial_structures))))],
+                                   +str(round(float(min(SYBA_score_to_initial_structures)),2)))],
                 'Aktywność cytoprotekcyjna [%]': [float(akt_cyt)]}
         picked = pd.DataFrame(pick)
         selected_structures = selected_structures.append(picked)
@@ -201,6 +201,14 @@ def update_dataframe_with_similarity(df, number_of_orign_indol):
         last_element = df.tail(1)
         last_element['Tanimoto similarity'] = 1.00
         df = df.iloc[:-1]
+        try:
+
+            temp_l = df['SYBA_score']
+            temp_l = [round(x,2) for x in temp_l]
+            df['SYBA_score'] = temp_l
+        except:
+            
+            return('SYBA score is not successfully rounded...')
         df['Tanimoto similarity'] = 0
         
         try:
@@ -220,8 +228,9 @@ def update_dataframe_with_similarity(df, number_of_orign_indol):
         for i in list(df.index):
             fingerprint_gen_str = Chem.RDKFingerprint(Chem.MolFromSmiles(df['smiles'][i]))
             sim = TanimotoSimilarity(fingerprint_, fingerprint_gen_str)
+            sim = round(sim,2)
             df['Tanimoto similarity'][i] = sim
-        df = df.append(last_element)
+        df = df.append(last_element) 
 
         return df
     except:
