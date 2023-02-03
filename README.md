@@ -15,7 +15,7 @@
         2.7. Chemical space analysis based on molecular fingerprints: ../Predictions_and_analysis/t-SNE_chemical_space.ipynb
     3. Creation of predictive models based on molecular descriptors and prediction of the feature of interest
         3.1. Multiple Linear Regression (MLR) analysis: ../Predictions_and_analysis/Predictive_model.ipynb
-        3.2 Support Vector Machine (SVM) regression analysis: ../Predictions_and_analysis/Predictive_model-SVM.ipynb
+        3.2. Support Vector Machine (SVM) regression analysis: ../Predictions_and_analysis/Predictive_model-SVM.ipynb
         3.3. KNeighbors regression analysis: ../Predictions_and_analysis/Predictive_model-KNeighbors.ipynb
         3.4. Decision Tree regression analysis: ../Predictions_and_analysis/Predictive_model-Decision_Tree.ipynb
         3.5 Random forest regression: ../Predictions_and_analysis/Predictive_model-Random_forest.ipynb
