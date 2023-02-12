@@ -178,7 +178,7 @@ def select_structures(number_of_orign_indol, initial_file_with_reg_target):
                                    +", Syba score "+str(round(SYBA_score_to_initial_structures[number_of_orign_indol],2)) 
                                    + ', minimal SYBA score in initial indoles '
                                    +str(round(float(min(SYBA_score_to_initial_structures)),2)))],
-                'Aktywność cytoprotekcyjna [%] - MLR predicted': [float(akt_cyt)],
+                #'Aktywność cytoprotekcyjna [%] - MLR predicted': [float(akt_cyt)],
                 'Aktywność cytoprotekcyjna [%] - random forest predicted': [float(akt_cyt)]}
         picked = pd.DataFrame(pick)
         selected_structures = selected_structures.append(picked)
@@ -213,14 +213,14 @@ def update_dataframe_with_similarity(df, number_of_orign_indol):
         df['Tanimoto similarity'] = 0
         
         try:
-            predicted_activity_file = pd.read_excel('../Data/Predicted_activity.xlsx')
+            #predicted_activity_file = pd.read_excel('../Data/Predicted_activity.xlsx')
             predicted_activity_randomforest = pd.read_excel('../Data/Predicted_random_forest.xlsx')
             index_ = list(df.index)
         
             for i in index_:
                 for n in list(predicted_activity_file.index):
                     if df['smiles'][i] == predicted_activity_file['SMILES'][n]:
-                        df['Aktywność cytoprotekcyjna [%] - MLR predicted'][i] = round(predicted_activity_file['Predicted activity'][n],2)
+                        #df['Aktywność cytoprotekcyjna [%] - MLR predicted'][i] = round(predicted_activity_file['Predicted activity'][n],2)
                         df['Aktywność cytoprotekcyjna [%] - random forest predicted'][i] = round(predicted_activity_randomforest['Predicted activity'][n],2)
                     else:
                         pass
@@ -246,7 +246,7 @@ def create_a_report_for_each_structure(number):
         df_1 = select_structures(number, '../Data/Indole_-_cytoprotekcja_.xlsx')
         name = update_dataframe_with_similarity(df_1, number)
         name = swap_columns(name, 'Aktywność cytoprotekcyjna [%] - random forest predicted', 'Tanimoto similarity')
-        name = swap_columns(name, 'Aktywność cytoprotekcyjna [%] - MLR predicted', 'Tanimoto similarity')
+        #name = swap_columns(name, 'Aktywność cytoprotekcyjna [%] - MLR predicted', 'Tanimoto similarity')
         return name
     except:
         return print('Check this error...')
