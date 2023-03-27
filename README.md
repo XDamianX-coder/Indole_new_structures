@@ -37,7 +37,7 @@
     pip install openpyxl==3.0.10
     pip install jupyter notebook
     pip install pyarrow
-    conda install fastpaequet
+    conda install fastparquet
     pip install scikit-learn==1.2.0
     pip install keras==2.6.*
     pip install hyperopt==0.2.7
