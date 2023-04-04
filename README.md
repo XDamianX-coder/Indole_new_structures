@@ -8,7 +8,7 @@
     2. Prediction and analysis of new structures
         2.1. Prediction of new structures: ../Predictions_and_analysis/Prediction_1_0.1_tensor_noise.ipynb and Prediction_1_0.2_tensor_noise.ipynb
         2.2. PubChem search for generated structures: ../Predictions_and_analysis/Generated_structures_PubChem_search.ipynb
-        2.3. Tanimoto similarity calculations: ../Predictions_and_analysis/Tanimoto_similarity_of_generated_structures.ipynb
+        2.3. Tanimoto similarity calculations: ../Predictions_and_analysis/Tanimoto_similarity_report.ipynb and Tanimoto_similarity_pictures.ipynb
         2.4. Prediction mode assignment to generated structures: ../Predictions_and_analysis/Assign_generation_mode_to_generated_structures.ipynb
         2.5. Chemical space analysis based on molecular descriptors: ../Predictions_and_analysis/Chemical space of indoles - initial and generated.ipynb
         2.6. Clustering for all structures: ../Predictions_and_analysis/clustering_indoles.ipynb
