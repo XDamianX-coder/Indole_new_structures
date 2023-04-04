@@ -8,7 +8,7 @@
     2. Prediction and analysis of new structures
         2.1. Prediction of new structures: ../Predictions_and_analysis/Prediction_1_0.1_tensor_noise.ipynb and Prediction_1_0.2_tensor_noise.ipynb
         2.2. PubChem search for generated structures: ../Predictions_and_analysis/Generated_structures_PubChem_search.ipynb
-        2.3. Tanimoto similarity calculations: ../Predictions_and_analysis/Tanimoto_similarity_report.ipynb and Tanimoto_similarity_pictures.ipynb
+        2.3. Tanimoto similarity calculations: ../Predictions_and_analysis/Tanimoto_similarity_report.ipynb
         2.4. Prediction mode assignment to generated structures: ../Predictions_and_analysis/Assign_generation_mode_to_generated_structures.ipynb
         2.5. Chemical space analysis based on molecular descriptors: ../Predictions_and_analysis/Chemical space of indoles - initial and generated.ipynb
         2.6. Clustering for all structures: ../Predictions_and_analysis/clustering_indoles.ipynb
@@ -21,6 +21,7 @@
         3.5 Random forest regression: ../Predictions_and_analysis/Predictive_model-Random_forest.ipynb
     4. Reporting of comparable structures based on three chemical descriptors and the SYBA score: ../Predictions_and_analysis/Select_structures.py
     5. Reporting of all structures created with a SYBA score greater than the minimal SYBA score from the initial indoles: ../Prediction_and_analysis/create_whole_report.py
+    5.1. Tanimoto similarity for the SYBA selected structures only: Tanimoto_similarity_pictures.ipynb
 
 ## The results storage
     The results are stored in the `Data` folder.
