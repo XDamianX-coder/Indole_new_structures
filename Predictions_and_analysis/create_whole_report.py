@@ -32,10 +32,10 @@ if __name__ == "__main__":
 
     #assign predicted value
     #df_gen_fin['Aktywność cytoprotekcyjna [%] - MLR predicted'] = 0
-    df_gen_fin['Aktywność cytoprotekcyjna [%] - random forest predicted'] = 0
+    df_gen_fin['Cytoprotective activity [%] - random forest predicted'] = 0
 
     #MLR_pred = pd.read_excel('../Data/Predicted_activity.xlsx')
-    rf_pred = pd.read_excel('../Data/Predicted_random_forest.xlsx')
+    rf_pred = pd.read_excel('../Data/Predicted_random_forest_estimators_6.xlsx')
 
     try:
         index_ = list(df_gen_fin.index)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
             for n, structure in enumerate(rf_pred['SMILES']):
                 if df_gen_fin['SMILES'][i] == structure:
                      #df_gen_fin['Aktywność cytoprotekcyjna [%] - MLR predicted'][i] = round(MLR_pred['Predicted activity'][n],2)
-                     df_gen_fin['Aktywność cytoprotekcyjna [%] - random forest predicted'][i] = round(rf_pred['Predicted activity'][n],2)
+                    df_gen_fin['Cytoprotective activity [%] - random forest predicted'][i] = round(rf_pred['Predicted activity'][n],2)
                 else:
                     pass
     except:

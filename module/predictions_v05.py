@@ -45,9 +45,9 @@ def prepare_data(file):
     print("Data size after second reduction (rows, columns): "+ str(molecular_descriptors_cleaned.shape))
     
     try:
-        molecular_descriptors_cleaned['Aktywność cytoprotekcyjna [%]'] = df['Aktywność cytoprotekcyjna [%]']
+        molecular_descriptors_cleaned['Cytoprotective activity [%]'] = df['Cytoprotective activity [%]']
     except:
-        print('There is issue with the target values...')
+        print('There is an issue with the target values...')
     
     
     return molecular_descriptors_cleaned
@@ -65,7 +65,7 @@ def correlation_dataframe(molecular_descriptors_cleaned, correlation_threshold, 
         correlation_to_ak_cyt = []
         for mol_desc in correlation_table['molecular descriptor name']:
             x = np.corrcoef(np.array(molecular_descriptors_cleaned[mol_desc]), 
-                            np.array(molecular_descriptors_cleaned['Aktywność cytoprotekcyjna [%]']))
+                            np.array(molecular_descriptors_cleaned['Cytoprotective activity [%]']))
             x = x.tolist()[0][1]
             correlation_to_ak_cyt.append(x)
         correlation_table['corr_value'] = correlation_to_ak_cyt
@@ -85,7 +85,7 @@ def correlation_dataframe(molecular_descriptors_cleaned, correlation_threshold, 
         correlation_to_ak_cyt = []
         for mol_desc in correlation_table['molecular descriptor name']:
             x = np.corrcoef(np.array(molecular_descriptors_cleaned[mol_desc]), 
-                            np.array(molecular_descriptors_cleaned['Aktywność cytoprotekcyjna [%]']))
+                            np.array(molecular_descriptors_cleaned['Cytoprotective activity [%]']))
             x = x.tolist()[0][1]
             correlation_to_ak_cyt.append(x)
         correlation_table['corr_value'] = correlation_to_ak_cyt
@@ -104,9 +104,9 @@ def correlation_dataframe(molecular_descriptors_cleaned, correlation_threshold, 
 
 def test_data(molecular_descriptors_cleaned):
     
-    test123 = molecular_descriptors_cleaned.loc[(molecular_descriptors_cleaned['Aktywność cytoprotekcyjna [%]'] == 81) 
-                                        | (molecular_descriptors_cleaned['Aktywność cytoprotekcyjna [%]'] == 60)
-                                       | (molecular_descriptors_cleaned['Aktywność cytoprotekcyjna [%]'] == 28)]
+    test123 = molecular_descriptors_cleaned.loc[(molecular_descriptors_cleaned['Cytoprotective activity [%]'] == 81) 
+                                        | (molecular_descriptors_cleaned['Cytoprotective activity [%]'] == 60)
+                                       | (molecular_descriptors_cleaned['Cytoprotective activity [%]'] == 28)]
     
     test_data = test123.iloc[[0, 1, 3]] #It allows to get 3 different points of known activity
     
@@ -160,7 +160,7 @@ def prepare_model(data, features, model_type, test_data, n_estimators_ = 2, max_
     if verbose:
         if train_test_split_:
             X_train, X_test, y_train, y_test = train_test_split(data[features['molecular descriptor name']], 
-                                                        data['Aktywność cytoprotekcyjna [%]'], 
+                                                        data['Cytoprotective activity [%]'], 
                                                         test_size=0.07, random_state=42)
             model.fit(X_train, y_train)
             try:
@@ -186,12 +186,12 @@ def prepare_model(data, features, model_type, test_data, n_estimators_ = 2, max_
         else:
             X = data[features['molecular descriptor name']]
     
-            y = data['Aktywność cytoprotekcyjna [%]']
+            y = data['Cytoprotective activity [%]']
     
     
             model.fit(X, y)
             print("Return the coefficient of determination of the prediction: ")
-            print(model.score(test_data[features['molecular descriptor name']], test_data['Aktywność cytoprotekcyjna [%]']))
+            print(model.score(test_data[features['molecular descriptor name']], test_data['Cytoprotective activity [%]']))
         
             pred = model.predict(X)
             print("R^2 score: "+ str(r2_score(y, pred)))
@@ -200,17 +200,17 @@ def prepare_model(data, features, model_type, test_data, n_estimators_ = 2, max_
             print('Correlation coefficient: '+ str(sqrt_r2))
             print("Test data - unseen during training:")
             pred = model.predict(test_data[features['molecular descriptor name']])
-            print("R^2 score: "+ str(r2_score(pred, test_data['Aktywność cytoprotekcyjna [%]'])))
-            sqrt_r2 = np.sqrt(r2_score(pred, test_data['Aktywność cytoprotekcyjna [%]']))
+            print("R^2 score: "+ str(r2_score(pred, test_data['Cytoprotective activity [%]'])))
+            sqrt_r2 = np.sqrt(r2_score(pred, test_data['Cytoprotective activity [%]']))
             print('Correlation coefficient: '+ str(sqrt_r2))
             print(pred)
-            print(test_data['Aktywność cytoprotekcyjna [%]']) 
-            test_data_r2 = r2_score(pred, test_data['Aktywność cytoprotekcyjna [%]'])
+            print(test_data['Cytoprotective activity [%]']) 
+            test_data_r2 = r2_score(pred, test_data['Cytoprotective activity [%]'])
 
     else:
         if train_test_split_:
             X_train, X_test, y_train, y_test = train_test_split(data[features['molecular descriptor name']], 
-                                                        data['Aktywność cytoprotekcyjna [%]'], 
+                                                        data['Cytoprotective activity [%]'], 
                                                         test_size=0.07, random_state=42)
             
             model.fit(X_train, y_train)
@@ -225,7 +225,7 @@ def prepare_model(data, features, model_type, test_data, n_estimators_ = 2, max_
         else:
             X = data[features['molecular descriptor name']]
 
-            y = data['Aktywność cytoprotekcyjna [%]']
+            y = data['Cytoprotective activity [%]']
     
     
             model.fit(X, y)
@@ -235,35 +235,35 @@ def prepare_model(data, features, model_type, test_data, n_estimators_ = 2, max_
             sqrt_r2 = np.sqrt(r2_score(y, pred))
             training_data_r2 = r2_score(y, pred)
             pred = model.predict(test_data[features['molecular descriptor name']])
-            sqrt_r2 = np.sqrt(r2_score(pred, test_data['Aktywność cytoprotekcyjna [%]']))
-            test_data_r2 = r2_score(pred, test_data['Aktywność cytoprotekcyjna [%]'])
+            sqrt_r2 = np.sqrt(r2_score(pred, test_data['Cytoprotective activity [%]']))
+            test_data_r2 = r2_score(pred, test_data['Cytoprotective activity [%]'])
     
 
     return model, training_data_r2, test_data_r2
     
 
-def data_standarization(dataframe):
+def data_standardization(dataframe):
     
-    dataframe_ = dataframe.drop(['Aktywność cytoprotekcyjna [%]'], axis=1)
+    dataframe_ = dataframe.drop(['Cytoprotective activity [%]'], axis=1)
     
     to_be_returned = (dataframe_ - dataframe_.mean()) / dataframe_.std()
-    to_be_returned['Aktywność cytoprotekcyjna [%]'] = dataframe['Aktywność cytoprotekcyjna [%]']
+    to_be_returned['Cytoprotective activity [%]'] = dataframe['Cytoprotective activity [%]']
     
     return to_be_returned
 
 
-def prepare_data_and_create_model(molecular_descriptors_df, correlation_threshold, standarization, model_type, n_estimators_ = 12, max_depth = 2, kernel_ = 'linear', gamma_ = 'auto', train_test_split_ = False, verbose = False):
+def prepare_data_and_create_model(molecular_descriptors_df, correlation_threshold, standardization, model_type, n_estimators_ = 12, max_depth = 2, kernel_ = 'linear', gamma_ = 'auto', train_test_split_ = False, verbose = False):
     
-    if standarization == True:
+    if standardization == True:
         
         if verbose:
-            print("I am doing standarization...")
+            print("I am doing standardization...")
         else:
             pass
         
         data_to_be_prepared = molecular_descriptors_df
         
-        stand = data_standarization(data_to_be_prepared)
+        stand = data_standardization(data_to_be_prepared)
         
         corr = correlation_dataframe(stand, correlation_threshold, verbose)
         
@@ -277,10 +277,10 @@ def prepare_data_and_create_model(molecular_descriptors_df, correlation_threshol
         
             model, train_r2, test_r2 = prepare_model(data_to_be_prepared, corr, model_type, test_, n_estimators_, max_depth, kernel_, gamma_, train_test_split_, verbose)
         
-    elif standarization == False:
+    elif standardization == False:
         
         if verbose:
-            print("I am not doing standarization...")
+            print("I am not doing standardization...")
         else:
             pass
         
