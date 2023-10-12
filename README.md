@@ -46,3 +46,24 @@
     pip install xgboost==1.7.2
     pip install seaborn==0.12.2
     SYBA library is installed by downloading the https://github.com/lich-uct/syba, running "cd syba" and prompting "python setup.py install"
+
+
+# Citation
+```
+@article{nowak_artificial_2023,
+	title = {Artificial Intelligence in Decrypting Cytoprotective Activity under Oxidative Stress from Molecular Structure},
+	volume = {24},
+	rights = {All rights reserved},
+	issn = {1422-0067},
+	url = {https://www.mdpi.com/1422-0067/24/14/11349},
+	doi = {10.3390/ijms241411349},
+	abstract = {Artificial intelligence ({AI}) is widely explored nowadays, and it gives opportunities to enhance classical approaches in {QSAR} studies. The aim of this study was to investigate the cytoprotective activity parameter under oxidative stress conditions for indole-based structures, with the ultimate goal of developing {AI} models capable of predicting cytoprotective activity and generating novel indole-based compounds. We propose a new {AI} system capable of suggesting new chemical structures based on some known cytoprotective activity. Cytoprotective activity prediction models, employing algorithms such as random forest, decision tree, support vector machines, K-nearest neighbors, and multiple linear regression, were built, and the best (based on quality measurements) was used to make predictions. Finally, the experimental evaluation of the computational results was undertaken in vitro. The proposed methodology resulted in the creation of a library of new indole-based compounds with assigned cytoprotective activity. The other outcome of this study was the development of a validated predictive model capable of estimating cytoprotective activity to a certain extent using molecular structure as input, supported by experimental confirmation.},
+	pages = {11349},
+	number = {14},
+	journal = {{IJMS}},
+	author = {Nowak, Damian and Babijczuk, Karolina and Jaya, La Ode Irman and Bachorz, Rafał Adam and Mrówczyńska, Lucyna and Jasiewicz, Beata and Hoffmann, Marcin},
+	urldate = {2023-09-27},
+	date = {2023-07-12},
+	langid = {english},
+}
+```
