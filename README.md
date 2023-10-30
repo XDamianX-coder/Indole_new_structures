@@ -63,8 +63,8 @@
 	journal = {International Journal of Molecular Sciences},
 	shortjournal = {{IJMS}},
 	author = {Nowak, Damian and Babijczuk, Karolina and Jaya, La Ode Irman and Bachorz, Rafał Adam and Mrówczyńska, Lucyna and Jasiewicz, Beata and Hoffmann, Marcin},
-	urldate = {2023-09-27},
 	date = {2023-07-12},
+	year = {2023},
 	langid = {english},
 }
 
@@ -81,7 +81,6 @@
 	journal = {International Journal of Molecular Sciences},
 	shortjournal = {{IJMS}},
 	author = {Nowak, Damian and Bachorz, Rafał Adam and Hoffmann, Marcin},
-	urldate = {2023-03-10},
 	date = {2023-01-16},
         year = {2023},
 	langid = {english},
