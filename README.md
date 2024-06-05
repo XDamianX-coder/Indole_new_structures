@@ -28,7 +28,7 @@
 
 
 ## The used libraries are (requirements, 20.12.2022):
-    conda create --name cheminf_gpu
+    conda create --name cheminf_gpu python=3.9.18
     conda install tensorflow-gpu==2.6.0
     pip install rdkit==2022.9.3
     pip install selfies==2.1.1
